@@ -1,6 +1,7 @@
 package rabochiyclasss.code.reservation_system;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -12,9 +13,9 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @GetMapping()
-    public String getReservationById() {
-        return reservationService.getReservationById();
+    @GetMapping("/{id}")
+    public Reservation getReservationById(@PathVariable("id") Long id) {
+        return reservationService.getReservationById(id);
     }
 
 }
