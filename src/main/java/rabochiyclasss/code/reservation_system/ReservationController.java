@@ -1,6 +1,7 @@
 package rabochiyclasss.code.reservation_system;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,9 +32,11 @@ public class ReservationController {
     }
 
     @PostMapping
-    public Reservation createReservation (@RequestBody Reservation reservationToCreate) {
+    public ResponseEntity<Reservation> createReservation (@RequestBody Reservation reservationToCreate) {
         log.info("Called createReservation");
-        return reservationService.createResevation(reservationToCreate);
+        return ResponseEntity.status(201)
+                .header("test-header", "123")
+                .body(reservationService.createResevation(reservationToCreate));
     }
 
 }
