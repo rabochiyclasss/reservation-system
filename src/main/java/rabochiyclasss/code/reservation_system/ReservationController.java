@@ -1,9 +1,7 @@
 package rabochiyclasss.code.reservation_system;
 
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import org.slf4j.Logger;
@@ -30,6 +28,12 @@ public class ReservationController {
     public List<Reservation> getAllReservations() {
         log.info("Called getAllReservations");
         return reservationService.findAllReservation();
+    }
+
+    @PostMapping
+    public Reservation createReservation (@RequestBody Reservation reservationToCreate) {
+        log.info("Called createReservation");
+        return reservationService.createResevation(reservationToCreate);
     }
 
 }

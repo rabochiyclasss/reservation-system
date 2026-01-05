@@ -31,4 +31,8 @@ public class ReservationService {
     public List<Reservation> findAllReservation() {
         return reservationMap.values().stream().toList();
     }
+
+    public Reservation createResevation(Reservation reservationToCreate) {
+
+    }
 }
