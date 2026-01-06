@@ -1,6 +1,7 @@
 package rabochiyclasss.code.reservation_system;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +21,10 @@ public class ReservationController {
     }
 
     @GetMapping("/{id}")
-    public Reservation getReservationById(@PathVariable("id") Long id) {
+    public ResponseEntity<Reservation> getReservationById(@PathVariable("id") Long id) {
         log.info("Called getReservationById: id = {}", id);
-        return reservationService.getReservationById(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(reservationService.getReservationById(id));
     }
 
     @GetMapping
