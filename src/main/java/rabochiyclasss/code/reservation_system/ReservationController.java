@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,8 +60,13 @@ public class ReservationController {
             @PathVariable("id") Long id
     ) {
         log.info("Called method deleteReservation: id={}", id);
-        reservationService.deleteReservation(id);
-        return ResponseEntity.ok().build();
+        try {
+            reservationService.deleteReservation(id);
+            return ResponseEntity.ok().build();
+        }
+        catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).build();
+        }
     }
 
 }
