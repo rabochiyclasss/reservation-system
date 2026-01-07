@@ -26,8 +26,13 @@ public class ReservationController {
     @GetMapping("/{id}")
     public ResponseEntity<Reservation> getReservationById(@PathVariable("id") Long id) {
         log.info("Called getReservationById: id = {}", id);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(reservationService.getReservationById(id));
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(reservationService.getReservationById(id));
+        }
+        catch (NoSuchElementException e){
+            return ResponseEntity.status(404).build();
+        }
     }
 
     @GetMapping
