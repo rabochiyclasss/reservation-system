@@ -42,4 +42,24 @@ public class ReservationController {
                 .body(reservationService.createResevation(reservationToCreate));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Reservation> updateReservation(
+            @PathVariable("id") Long id,
+            @RequestBody Reservation reservationToUpdate
+    ) {
+        log.info("Called method updateReservation id={}, reservationToUpdate={}",
+                id, reservationToUpdate);
+        var updated = reservationService.updateReservation(id, reservationToUpdate);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReservation(
+            @PathVariable("id") Long id
+    ) {
+        log.info("Called method deleteReservation: id={}", id);
+        reservationService.deleteReservation(id);
+        return ResponseEntity.ok().build();
+    }
+
 }
