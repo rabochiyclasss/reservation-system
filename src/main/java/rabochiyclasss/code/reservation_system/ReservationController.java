@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RestController
+@RequestMapping("/reservation")
 public class ReservationController {
 
     private static final Logger log = LoggerFactory.getLogger(ReservationController.class);
@@ -36,7 +37,7 @@ public class ReservationController {
     @PostMapping
     public ResponseEntity<Reservation> createReservation (@RequestBody Reservation reservationToCreate) {
         log.info("Called createReservation");
-        return ResponseEntity.status(201)
+        return ResponseEntity.status(HttpStatus.CREATED)
                 .header("test-header", "123")
                 .body(reservationService.createResevation(reservationToCreate));
     }
