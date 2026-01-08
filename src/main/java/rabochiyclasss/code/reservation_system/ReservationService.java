@@ -77,6 +77,35 @@ public class ReservationService {
     }
 
     public Reservation approveReservation(Long id) {
-        return null;
+        if (!reservationMap.containsKey(id)) {
+            throw new NoSuchElementException("Not found reservation by id = " + id);
+        }
+        var reservation = reservationMap.get(id);
+        if (reservation.status() != ReservationStatus.PENDING) {
+            throw new IllegalStateException("Cannot approve reservation: status=" + reservation.status());
+        }
+        var isConflict = isReservationConflict(reservation);
+        if (isConflict) {
+            throw new IllegalStateException("Cannot approve reservation because of conflict");
+        }
+
+        var approvedReservation = new Reservation(
+                reservation.id(),
+                reservation.userId(),
+                reservation.roomId(),
+                reservation.startDate(),
+                reservation.endDate(),
+                ReservationStatus.APPROVED
+        );
+        reservationMap.put(reservation.id(), approvedReservation);
+        return approvedReservation;
     }
+
+    //helper method for approve reservation to check for intersections in dates to approve correctly
+    private boolean isReservationConflict(
+        Reservation reservation
+    ){
+        return false;
+    }
+
 }
