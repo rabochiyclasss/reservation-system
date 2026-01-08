@@ -49,7 +49,24 @@ public class ReservationService {
     }
 
     public Reservation updateReservation(Long id, Reservation reservationToUpdate) {
-        return null;
+        if (!reservationMap.containsKey(id)) {
+            throw new NoSuchElementException("Not found reservation by id = " + id);
+        }
+        var reservation = reservationMap.get(id);
+        if (reservation.status() != ReservationStatus.PENDING) {
+            throw new IllegalStateException("Cannot modify reservation: status=" + reservation.status());
+        }
+
+        var updatedReservation = new Reservation(
+                reservation.id(),
+                reservationToUpdate.userId(),
+                reservationToUpdate.roomId(),
+                reservationToUpdate.startDate(),
+                reservationToUpdate.endDate(),
+                ReservationStatus.PENDING
+        );
+        reservationMap.put(reservation.id(), updatedReservation);
+        return updatedReservation;
     }
 
     public void deleteReservation(Long id) {
