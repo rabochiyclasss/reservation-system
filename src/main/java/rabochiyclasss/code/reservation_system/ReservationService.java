@@ -75,4 +75,8 @@ public class ReservationService {
         }
         reservationMap.remove(id);
     }
+
+    public Reservation approveReservation(Long id) {
+        return null;
+    }
 }
