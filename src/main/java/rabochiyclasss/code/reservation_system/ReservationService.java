@@ -105,6 +105,22 @@ public class ReservationService {
     private boolean isReservationConflict(
         Reservation reservation
     ){
+        for (Reservation existingReservation : reservationMap.values()) {
+            if (reservation.id().equals(existingReservation.id())) {
+                continue;
+            }
+            if (!reservation.roomId().equals(existingReservation.roomId())) {
+                continue;
+            }
+            if (!existingReservation.status().equals(ReservationStatus.APPROVED)) {
+                continue;
+            }
+            //start before end of reservation which already exists
+            if (reservation.startDate().isBefore(existingReservation.endDate())
+                && existingReservation.startDate().isBefore(reservation.endDate())) {
+                return true;
+            }
+        }
         return false;
     }
 
