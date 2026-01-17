@@ -46,7 +46,7 @@ public class ReservationController {
         log.info("Called createReservation");
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header("test-header", "123")
-                .body(reservationService.createResevation(reservationToCreate));
+                .body(reservationService.createReservation(reservationToCreate));
     }
 
     @PutMapping("/{id}")

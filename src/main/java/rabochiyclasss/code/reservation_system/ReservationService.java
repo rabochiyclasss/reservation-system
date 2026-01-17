@@ -1,5 +1,6 @@
 package rabochiyclasss.code.reservation_system;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,9 +24,13 @@ public class ReservationService {
     }
 
     public Reservation getReservationById(Long id) {
-        if (!reservationMap.containsKey(id)) {
-            throw new NoSuchElementException("Not found reservation by id = " + id);
-        }
+        //optional is a data structure which can be empty
+        ReservationEntity reservationEntity = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Not found reservation by id = "  + id
+                ));
+
+
         return reservationMap.get(id);
     }
 
@@ -33,22 +38,11 @@ public class ReservationService {
 
         List<ReservationEntity> allEntities = repository.findAll();
 
-        List<Reservation> reservationList = allEntities.stream()
-                .map(it ->
-                    new Reservation(
-                            it.getId(),
-                            it.getUserId(),
-                            it.getRoomId(),
-                            it.getStartDate(),
-                            it.getEndDate(),
-                            it.getStatus()
-                    )
-                ).toList();
-
-        return reservationList;
+       return allEntities.stream()
+               .map(this::toDomainReservation).toList();
     }
 
-    public Reservation createResevation(Reservation reservationToCreate) {
+    public Reservation createReservation(Reservation reservationToCreate) {
         if (reservationToCreate.id() != null){
             throw new IllegalArgumentException("Id should be empty");
         }
@@ -141,6 +135,17 @@ public class ReservationService {
             }
         }
         return false;
+    }
+
+    private Reservation toDomainReservation (ReservationEntity reservation) {
+        return new Reservation(
+                reservation.getId(),
+                reservation.getUserId(),
+                reservation.getRoomId(),
+                reservation.getStartDate(),
+                reservation.getEndDate(),
+                reservation.getStatus()
+        );
     }
 
 }
