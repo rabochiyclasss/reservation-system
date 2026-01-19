@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/reservation")
@@ -60,13 +59,13 @@ public class ReservationController {
         return ResponseEntity.ok(updated);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/cancel")
     public ResponseEntity<Void> deleteReservation(
             @PathVariable("id") Long id
     ) {
         log.info("Called method deleteReservation: id={}", id);
         try {
-            reservationService.deleteReservation(id);
+            reservationService.cancelReservation(id);
             return ResponseEntity.ok().build();
         }
         catch (NoSuchElementException e) {

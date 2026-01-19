@@ -42,4 +42,15 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
             @Param("endDate") LocalDate endDate,
             @Param("status") ReservationStatus status
     );
+
+
+    @Modifying
+    @Query("""
+            update ReservationEntity r 
+            set r.status = :status
+            where r.id = :id
+            """
+    )
+    void setStatus(@Param("id") Long id,
+                   @Param("status") ReservationStatus reservationStatus);
 }

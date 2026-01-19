@@ -1,15 +1,17 @@
 package rabochiyclasss.code.reservation_system;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class ReservationService {
 
+    private static final Logger log = LoggerFactory.getLogger(ReservationService.class);
 
     private final ReservationRepository repository;
 
@@ -76,11 +78,13 @@ public class ReservationService {
         return toDomainReservation(updatedReservation);
     }
 
-    public void deleteReservation(Long id) {
+    @Transactional
+    public void cancelReservation(Long id) {
         if (!repository.existsById(id)) {
             throw new NoSuchElementException("Not found reservation by id = " + id);
         }
-        repository.deleteById(id);
+        repository.setStatus(id, ReservationStatus.CANCELLED);
+        log.info("Successfully cancelled reservation with id={}", id);
     }
 
     public Reservation approveReservation(Long id) {
