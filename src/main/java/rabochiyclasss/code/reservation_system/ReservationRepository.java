@@ -1,7 +1,45 @@
 package rabochiyclasss.code.reservation_system;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
 
+    @Query("select r from ReservationEntity r where r.status = :status")//JPQL
+    List<ReservationEntity> findAllByStatusIs(@Param("status")ReservationStatus status);//this status will be in the ":status" above
+
+    // Raw SQL request
+//    @Query(value = "select * from reservations r where r.status = :status", nativeQuery = true)//SQL
+//    List<ReservationEntity> findAllByStatusIs(ReservationStatus status);
+
+    @Query("select r from ReservationEntity r where r.roomId = :roomId")
+    List<ReservationEntity> findAllByRoomId(@Param("roomId")Long roomId);
+
+    //All modifying methods has to be transactional
+    @Transactional
+    @Modifying
+    @Query("""
+            update ReservationEntity r 
+            set r.userId = :userId, 
+                r.roomId = :roomId, 
+                r.startDate = :startDate, 
+                r.endDate = :endDate,
+                r.status = :status
+            where r.id = :id
+            """
+    )
+    int updateAllFields(
+            @Param("id") Long id,
+            @Param("userId") Long userId,
+            @Param("roomId") Long roomId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            @Param("status") ReservationStatus status
+    );
 }
